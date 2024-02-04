@@ -35,6 +35,7 @@ export default function TextForm(props) {
         text.select();
         navigator.clipboard.writeText(text.value);
         props.showAlert("Text Coppied" ,"Success");
+        document.getSelection().removeAllRanges();
     }
     
     //onChange automatically pass event in it
@@ -50,24 +51,24 @@ export default function TextForm(props) {
     return (
         <>
         <div className='container' style={{color:props.mode==='light'?'black':'white'}}>
-            <h2>{props.heading}</h2>   
+            <h2 className='mb-2'>{props.heading}</h2>   
             <div className="mb-3">
                 {/* <label for="myBox" className="form-label">Enter text area</label> */}
                 <textarea className="form-control" id="myBox" value={text} onChange={handleOnChange} 
-                    style={{backgroundColor:props.mode==='dark'?'grey':'light' , color:props.mode==='light'?'black':'white'}} rows="8"></textarea>
+                    style={{backgroundColor:props.mode==='dark'?'#A7A88A':'#EBEBE8' , color:props.mode==='light'?'black':'white'}} rows="8"></textarea>
                 {/* text is hook , handleOnChange will trigger the change*/}
             </div>
-            <button className="btn btn-primary mx-2" onClick={handleUpClick}>Convert to Uppercase</button>
-            <button className="btn btn-primary mx-2" onClick={handleLowClick}>Convert to Lowercase</button>
-            <button className="btn btn-primary mx-2" onClick={handleClearClick}>Clear text</button>
-            <button className="btn btn-primary mx-2" onClick={handleCopy}>Copy text</button>
+            <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleUpClick}>Convert to Uppercase</button>
+            <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleLowClick}>Convert to Lowercase</button>
+            <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleClearClick}>Clear text</button>
+            <button disabled={text.length===0} className="btn btn-primary mx-2 my-1" onClick={handleCopy}>Copy text</button>
         </div>
         <div className="container my-2" style={{color:props.mode==='light'?'black':'white'}}>
             <h1>Your text summary</h1>
-            <p>{text.split(" ").length} words , {text.length} characters</p>
-            <p>Average time to read this in minutes {0.008*text.split(" ").length}</p>
+            <p>{text.split(" ").filter((element)=>{return element.length!==0}).length} words , {text.length} characters</p>
+            <p>Average time to read this in minutes {0.008*text.split(" ").filter((element)=>{return element.length!==0}).length}</p>
             <h3>Preview</h3>
-            <p>{text.length>0?text:"Enter something on textbox above to preview here "}</p>
+            <p>{text.length>0?text:"Nothing to preview "}</p>
         </div>
         </>
     );
